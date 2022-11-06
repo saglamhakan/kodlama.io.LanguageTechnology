@@ -23,10 +23,11 @@ public class LanguageTechnology {
 
     @Column(name = "language_name")
     private String languageName;
+
     @Column(name = "language_id")
     private int languageId;
 
    @OneToMany(mappedBy = "languageTechnology")
-    private List<SubTechnology> subTechnologies;
+    private List<SubTechnology> subTechnology;
 }
 

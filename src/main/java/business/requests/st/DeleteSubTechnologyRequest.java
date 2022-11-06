@@ -1,4 +1,4 @@
-package business.requests;
+package business.requests.st;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class CreateLanguageTechnologyRequests {
-    private String name;
+public class DeleteSubTechnologyRequest {
+    private int id;
 }

@@ -1,7 +1,10 @@
 package business.concretes;
 
 import business.abstracts.LanguageTechnologyService;
-import business.responses.GetAllLanguageTechnologyResponses;
+import business.requests.lt.CreateLanguageTechnologyRequests;
+import business.requests.lt.DeleteLanguageTechnologyRequest;
+import business.requests.lt.UpdateLanguageTechnologyRequest;
+import business.responses.GetAllLanguageTechnologyResponse;
 import dataAccess.abstracts.LanguageRepository;
 import entities.LanguageTechnology;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,53 +12,52 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Service
 public class LanguageTechnologyManager implements LanguageTechnologyService {
+    public LanguageRepository languageRepository;
 
     @Autowired
-    private LanguageRepository languageRepository;
-
-    @Autowired
-    private LanguageTechnologyManager(LanguageRepository languageRepository) {
+    public LanguageTechnologyManager(LanguageRepository languageRepository) {
         this.languageRepository = languageRepository;
     }
 
-    @Override
-    public List<GetAllLanguageTechnologyResponses> getAll() {
-      List<LanguageTechnology> languageTechnologies=languageRepository.getAll();
-      List<GetAllLanguageTechnologyResponses> languageTechnologyResponses=new ArrayList<>();
 
-      for (LanguageTechnology languageTechnology:languageTechnologies){
-          GetAllLanguageTechnologyResponses responsesItem=new GetAllLanguageTechnologyResponses();
-          responsesItem.setId(languageTechnology.getLanguageId());
-          responsesItem.setLanguageName(languageTechnology.getLanguageName());
-          languageTechnologyResponses.add(responsesItem);
-      }
-      return languageTechnologyResponses;
+    @Override
+    public List<GetAllLanguageTechnologyResponse> getAll() {
+        List<LanguageTechnology> languageTechnologies = languageRepository.findAll();
+        List<GetAllLanguageTechnologyResponse> getAllLanguageTechnologyResponses = new ArrayList<GetAllLanguageTechnologyResponse>();
+
+        for (LanguageTechnology languageTechnology : languageTechnologies) {
+            GetAllLanguageTechnologyResponse responseItem = new GetAllLanguageTechnologyResponse();
+            responseItem.setId(languageTechnology.getLanguageId());
+            responseItem.setName(languageTechnology.getLanguageName());
+            getAllLanguageTechnologyResponses.add(responseItem);
+        }
+        return getAllLanguageTechnologyResponses;
     }
 
     @Override
-    public void add(LanguageTechnology languageTechnology) {
-        this.languageRepository.save();
-
-    }
-
-    @Override
-    public void delete(LanguageTechnology languageTechnology) {
-        this.languageRepository.delete(languageTechnology);
-
-    }
-
-    @Override
-    public void update(LanguageTechnology languageTechnology, int id) {
-        this.languageRepository.update(languageTechnology, id);
+    public void add(CreateLanguageTechnologyRequests createLanguageTechnologyRequests) throws Exception {
+        LanguageTechnology technology=new LanguageTechnology();
+        technology.setLanguageName(createLanguageTechnologyRequests.getName());
+        this.languageRepository.save(new LanguageTechnology());
 
     }
 
     @Override
-    public void update(LanguageTechnology languageTechnology) {
+    public void delete(DeleteLanguageTechnologyRequest deleteLanguageTechnologyRequest) throws Exception {
+        languageRepository.deleteById(deleteLanguageTechnologyRequest.getId());
 
     }
 
+    @Override
+    public void update(UpdateLanguageTechnologyRequest updateLanguageTechnologyRequest, int id) throws Exception {
+        if (!updateLanguageTechnologyRequest.getName().isEmpty()){
+            LanguageTechnology updatedLanguageTechnology=languageRepository.findById(id).get();
+            updatedLanguageTechnology.setLanguageName(updatedLanguageTechnology.getLanguageName());
+            languageRepository.save(updatedLanguageTechnology);
+        }
 
+    }
 }

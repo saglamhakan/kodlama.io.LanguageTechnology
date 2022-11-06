@@ -9,17 +9,20 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "/subTechnologies")
+@Table(name = "subTechnology")
 @Entity
 
 public class SubTechnology {
 
     @Id
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Column(name = "sub_technologies_name")
-    private String subTechnologiesName;
+    private String subTechnologyName;
+
     @Column(name = "sub_technologies_id")
-    private int subTecnologiesId;
+    private int subTechnologyId;
 
 
     @ManyToOne
